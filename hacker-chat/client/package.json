@@ -1,0 +1,26 @@
+{
+  "name": "@fabianofps/hacker-chat-client-sjx3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "hacker-chat": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "user01": "node index.js --username fabiano01 --room sala01 --hostUri http://localhost:9898",
+    "user02": "node index.js --username fabiano02 --room sala01 --hostUri http://localhost:9898",
+    "user03": "node index.js --username Zeno --room sala02 --hostUri http://localhost:9898",
+    "user04": "node index.js --username Albino --room sala02 --hostUri http://localhost:9898",
+    "user05": "node index.js --username Bino --room sala02",
+    "user06": "node index.js --username Godoy --room sala02",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "blessed": "^0.1.81"
+  }
+}

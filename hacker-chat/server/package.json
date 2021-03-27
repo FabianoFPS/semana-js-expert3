@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Semana jsexpert",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "scripts": {
+    "start": "node src/",
+    "dev": "npx nodemon node src/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "15"
+  },
+  "keywords": [],
+  "author": "Fabiano F. P. Stoffel",
+  "license": "ISC"
+}
