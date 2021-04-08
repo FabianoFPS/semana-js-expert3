@@ -17,16 +17,16 @@ const data = [
     name: 'RocaSales',
     category: 'manager',
   },
-  
+
 ];
 
 describe('Test Suite for FluentSQL Builder', () => {
   test('#for should return a FluentSQLBuilder instance', () => {
     const result = FluentSQLBuilder.for(data);
-    const expected = new FluentSQLBuilder({database: data});
+    const expected = new FluentSQLBuilder({ database: data });
     expect(result).toStrictEqual(expected);
   });
-  
+
   test('#build should return the empty object instance', () => {
     const result = FluentSQLBuilder.for(data).build();
     const expected = data;
@@ -43,10 +43,53 @@ describe('Test Suite for FluentSQL Builder', () => {
     const result = FluentSQLBuilder.for(data).where({
       category: /^dev/,
     }).build();
-    const expected = data.filter(({category}) => category.slice(0, 3) === 'dev');
+    const expected = data.filter(({ category }) => category.slice(0, 3) === 'dev');
     expect(result).toStrictEqual(expected);
   });
-  test.todo('#select given a collection it should only specifc fields');
-  test.todo('#orderBy given a collection it should order results by field');
-  test.todo('pipeline');
+
+  test('#select given a collection it should only specifc fields', () => {
+    const result = FluentSQLBuilder
+      .for(data)
+      .select(['name', 'category'])
+      .build();
+
+    const expected = data.map(({ name, category }) => ({ name, category }));
+
+    expect(result).toStrictEqual(expected);
+  });
+
+  test('#orderBy given a collection it should order results by field', () => {
+    const result = FluentSQLBuilder
+      .for(data)
+      .orderBy('name')
+      .build();
+    const expected = [
+      {
+        id: 1,
+        name: 'CascataBiruta',
+        category: 'developer',
+      },
+      {
+        id: 0,
+        name: 'Jucabala',
+        category: 'developer',
+      },
+      {
+        id: 2,
+        name: 'RocaSales',
+        category: 'manager',
+      },
+    ];
+    expect(result).toStrictEqual(expected);
+  });
+
+  test('pipeline', () => {
+    const result = FluentSQLBuilder.for(data)
+      .where({ category: 'developer' })
+      .where({ name: /uc/ })
+      .select('name')
+      .build();
+
+    console.log('RESULT', result);
+  });
 });

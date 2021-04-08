@@ -25,7 +25,11 @@ export class FluentSQLBuilder {
 
   where(query){
     const [[prop, selectedValue]] = Object.entries(query);
-    this.#where = query;
+    const whereFilter = selectedValue instanceof RegExp ?
+      selectedValue :
+      new RegExp(selectedValue);
+
+    this.#where.push({prop, filter: whereFilter});
     return this;
   }
 
@@ -39,16 +43,43 @@ export class FluentSQLBuilder {
   }
  
   #performWhere(item) {
-    
+    for(const {filter, prop} of this.#where) {
+      if(!filter.test(item[prop])) return false;
+    }
+
+    return true;
+  } 
+  
+  #performSelect(item) {
+    const currentItem = {};
+    const entries = Object.entries(item);
+
+    for(const [key, value] of entries) {
+      if(this.#select.length && !this.#select.includes(key)) continue;
+      currentItem[key] = value;
+    }
+
+    return currentItem;
+  }
+
+  #performOrderBy(results) {
+    if(!this.#orderBy.length) return results;
+
+    return results.sort((prev, next) => {
+      return prev[this.#orderBy].localeCompare(next[this.#orderBy]);
+    });
   }
 
   build() {
     const results = [];
+
     for(const item of this.#database) {
-      results.push(item);
       if(!this.#performWhere(item)) continue;
+      const currentItem = this.#performSelect(item)
+      results.push(currentItem);
       if(this.#performLimit(results)) break;
     }
-    return results;
+    const finalResult = this.#performOrderBy(results);
+    return finalResult;
   }
 }
