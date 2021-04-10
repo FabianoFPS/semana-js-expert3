@@ -18,7 +18,7 @@ export class FluentSQLBuilder {
     return this;
   }
 
-  select(props) {
+  select(...props) {
     this.#select = props;
     return this;
   }
@@ -66,7 +66,9 @@ export class FluentSQLBuilder {
     if(!this.#orderBy.length) return results;
 
     return results.sort((prev, next) => {
-      return prev[this.#orderBy].localeCompare(next[this.#orderBy]);
+      return prev[this.#orderBy]
+        .toString().
+        localeCompare(next[this.#orderBy].toString());
     });
   }
 

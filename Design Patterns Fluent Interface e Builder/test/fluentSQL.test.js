@@ -3,12 +3,12 @@ import { FluentSQLBuilder } from '../src/fluentSQL.js';
 
 const data = [
   {
-    id: 0,
+    id: 98,
     name: 'Jucabala',
     category: 'developer',
   },
   {
-    id: 1,
+    id: 33,
     name: 'CascataBiruta',
     category: 'developer',
   },
@@ -50,7 +50,7 @@ describe('Test Suite for FluentSQL Builder', () => {
   test('#select given a collection it should only specifc fields', () => {
     const result = FluentSQLBuilder
       .for(data)
-      .select(['name', 'category'])
+      .select('name', 'category')
       .build();
 
     const expected = data.map(({ name, category }) => ({ name, category }));
@@ -63,23 +63,7 @@ describe('Test Suite for FluentSQL Builder', () => {
       .for(data)
       .orderBy('name')
       .build();
-    const expected = [
-      {
-        id: 1,
-        name: 'CascataBiruta',
-        category: 'developer',
-      },
-      {
-        id: 0,
-        name: 'Jucabala',
-        category: 'developer',
-      },
-      {
-        id: 2,
-        name: 'RocaSales',
-        category: 'manager',
-      },
-    ];
+    const expected = data.sort((prev, next) => prev.name.localeCompare(next.name));
     expect(result).toStrictEqual(expected);
   });
 
@@ -87,9 +71,11 @@ describe('Test Suite for FluentSQL Builder', () => {
     const result = FluentSQLBuilder.for(data)
       .where({ category: 'developer' })
       .where({ name: /uc/ })
-      .select('name')
+      .select('id', 'name',)
+      .orderBy('id')
       .build();
 
-    console.log('RESULT', result);
+    const expected = data.filter(({ id }) => id === 98).map(({ name, id }) => ({ name, id }));
+    expect(result).toStrictEqual(expected);
   });
 });
